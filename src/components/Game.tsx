@@ -2,9 +2,12 @@
 
 import { useState, useEffect, useRef } from "react";
 import * as Colyseus from "colyseus.js";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import LanguageMenu from "./LanguageMenu";
 import Leaderboard from "./Leaderboard";
+import LoadingButton from "./LoadingButton";
 import {
   DEFAULT_LANGUAGE,
   DEFAULT_LOCALE,
@@ -14,7 +17,6 @@ import { isEmpty } from "@/utils/helper";
 import { CLIENT } from "@/utils/multiplayer";
 import { numToString } from "@/utils/numberConverter";
 import { useAppStore } from "@/utils/store";
-import LoadingButton from "./LoadingButton";
 
 let ROOM: Colyseus.Room;
 
@@ -142,6 +144,10 @@ const Game = () => {
       });
     } catch (e) {
       console.log("JOIN ERROR", e);
+      toast.error("Unable to join. Please try again later.", {
+        position: "bottom-center",
+        autoClose: 2500,
+      });
     }
 
     setCommunicating(false);
@@ -181,7 +187,7 @@ const Game = () => {
       </div>
       <h1
         ref={promptRef}
-        className="my-10 text-7xl font-medium text-text-accent"
+        className="my-10 text-center text-5xl font-medium text-text-accent lg:text-7xl"
       >
         {prompt}
       </h1>
@@ -220,6 +226,8 @@ const Game = () => {
       )}
 
       {!isEmpty(playerScores) && <Leaderboard final={false} />}
+
+      <ToastContainer />
     </>
   );
 };
